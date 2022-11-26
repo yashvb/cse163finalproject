@@ -1,0 +1,160 @@
+{"name": "vvs",
+
+"children": [{
+ "name": "1981 Mens",
+ "children": [{"name": "Baseball", "children": [{"name": "Division 1", "children": [{"name": "Teams", "size": 254.0}, {"name": "Atheletes", "size": 7.0}, {"name": "Avg Squad", "size": 29.4}]}, {"name": "Division 2", "children": [{"name": "Teams", "size": 148.0}, {"name": "Atheletes", "size": 3.0}, {"name": "Avg Squad", "size": 26.6}]}, {"name": "Division 3", "children": [{"name": "Teams", "size": 240.0}, {"name": "Atheletes", "size": 5.0}, {"name": "Avg Squad", "size": 24.3}]}]}, {"name": "Basketball", "children": [{"name": "Division 1", "children": [{"name": "Teams", "size": 273.0}, {"name": "Atheletes", "size": 4.0}, {"name": "Avg Squad", "size": 15.1}]}, {"name": "Division 2", "children": [{"name": "Teams", "size": 190.0}, {"name": "Atheletes", "size": 2.0}, {"name": "Avg Squad", "size": 15.3}]}, {"name": "Division 3", "children": [{"name": "Teams", "size": 278.0}, {"name": "Atheletes", "size": 4.0}, {"name": "Avg Squad", "size": 16.3}]}]}, {"name": "Cross C", "children": [{"name": "Division 1", "children": [{"name": "Teams", "size": 256.0}, {"name": "Atheletes", "size": 3.0}, {"name": "Avg Squad", "size": 15.3}]}, {"name": "Division 2", "children": [{"name": "Teams", "size": 161.0}, {"name": "Atheletes", "size": 1.0}, {"name": "Avg Squad", "size": 12.2}]}, {"name": "Division 3", "children": [{"name": "Teams", "size": 233.0}, {"name": "Atheletes", "size": 3.0}, {"name": "Avg Squad", "size": 13.2}]}]}, {"name": "Fencing", "children": [{"name": "Division 1", "children": [{"name": "Teams", "size": 43.0}, {"name": "Atheletes", "size": 767.0}, {"name": "Avg Squad", "size": 17.8}]}, {"name": "Division 2", "children": [{"name": "Teams", "size": 9.0}, {"name": "Atheletes", "size": 145.0}, {"name": "Avg Squad", "size": 16.1}]}, {"name": "Division 3", "children": [{"name": "Teams", "size": 27.0}, {"name": "Atheletes", "size": 507.0}, {"name": "Avg Squad", "size": 18.8}]}]}, {"name": "Football", "children": [{"name": "Division 1", "children": [{"name": "Teams", "size": 187.0}, {"name": "Atheletes", "size": 17.0}, {"name": "Avg Squad", "size": 95.4}]}, {"name": "Division 2", "children": [{"name": "Teams", "size": 121.0}, {"name": "Atheletes", "size": 9.0}, {"name": "Avg Squad", "size": 81.0}]}, {"name": "Division 3", "children": [{"name": "Teams", "size": 189.0}, {"name": "Atheletes", "size": 13.0}, {"name": "Avg Squad", "size": 69.3}]}]}, {"name": "Golf", "children": [{"name": "Division 1", "children": [{"name": "Teams", "size": 263.0}, {"name": "Atheletes", "size": 2.0}, {"name": "Avg Squad", "size": 11.3}]}, {"name": "Division 2", "children": [{"name": "Teams", "size": 134.0}, {"name": "Atheletes", "size": 1.0}, {"name": "Avg Squad", "size": 9.8}]}, {"name": "Division 3", "children": [{"name": "Teams", "size": 193.0}, {"name": "Atheletes", "size": 2.0}, {"name": "Avg Squad", "size": 10.8}]}]}, {"name": "Gymnastics", "children": [{"name": "Division 1", "children": [{"name": "Teams", "size": 59.0}, {"name": "Atheletes", "size": 1.0}, {"name": "Avg Squad", "size": 17.8}]}, {"name": "Division 2", "children": [{"name": "Teams", "size": 10.0}, {"name": "Atheletes", "size": 151.0}, {"name": "Avg Squad", "size": 15.1}]}, {"name": "Division 3", "children": [{"name": "Teams", "size": 10.0}, {"name": "Atheletes", "size": 164.0}, {"name": "Avg Squad", "size": 16.4}]}]}, {"name": "Ice Hockey", "children": [{"name": "Division 1", "children": [{"name": "Teams", "size": 48.0}, {"name": "Atheletes", "size": 1.0}, {"name": "Avg Squad", "size": 28.5}]}, {"name": "Division 2", "children": [{"name": "Teams", "size": 24.0}, {"name": "Atheletes", "size": 699.0}, {"name": "Avg Squad", "size": 29.1}]}, {"name": "Division 3", "children": [{"name": "Teams", "size": 58.0}, {"name": "Atheletes", "size": 1.0}, {"name": "Avg Squad", "size": 26.3}]}]}, {"name": "Lacrosse", "children": [{"name": "Division 1", "children": [{"name": "Teams", "size": 50.0}, {"name": "Atheletes", "size": 1.0}, {"name": "Avg Squad", "size": 33.2}]}, {"name": "Division 2", "children": [{"name": "Teams", "size": 18.0}, {"name": "Atheletes", "size": 476.0}, {"name": "Avg Squad", "size": 26.4}]}, {"name": "Division 3", "children": [{"name": "Teams", "size": 70.0}, {"name": "Atheletes", "size": 2.0}, {"name": "Avg Squad", "size": 29.4}]}]}, {"name": "Rifle", "children": [{"name": "Division 1", "children": [{"name": "Teams", "size": 49.0}, {"name": "Atheletes", "size": 442.0}, {"name": "Avg Squad", "size": 9.0}]}, {"name": "Division 2", "children": [{"name": "Teams", "size": 17.0}, {"name": "Atheletes", "size": 129.0}, {"name": "Avg Squad", "size": 7.6}]}, {"name": "Division 3", "children": [{"name": "Teams", "size": 17.0}, {"name": "Atheletes", "size": 208.0}, {"name": "Avg Squad", "size": 12.2}]}]}, {"name": "Skiing", "children": [{"name": "Division 1", "children": [{"name": "Teams", "size": 20.0}, {"name": "Atheletes", "size": 372.0}, {"name": "Avg Squad", "size": 18.6}]}, {"name": "Division 2", "children": [{"name": "Teams", "size": 13.0}, {"name": "Atheletes", "size": 183.0}, {"name": "Avg Squad", "size": 14.1}]}, {"name": "Division 3", "children": [{"name": "Teams", "size": 22.0}, {"name": "Atheletes", "size": 301.0}, {"name": "Avg Squad", "size": 13.7}]}]}, {"name": "Soccer", "children": [{"name": "Division 1", "children": [{"name": "Teams", "size": 182.0}, {"name": "Atheletes", "size": 4.0}, {"name": "Avg Squad", "size": 25.4}]}, {"name": "Division 2", "children": [{"name": "Teams", "size": 106.0}, {"name": "Atheletes", "size": 2.0}, {"name": "Avg Squad", "size": 23.2}]}, {"name": "Division 3", "children": [{"name": "Teams", "size": 233.0}, {"name": "Atheletes", "size": 5.0}, {"name": "Avg Squad", "size": 25.2}]}]}, {"name": "Swimming", "children": [{"name": "Division 1", "children": [{"name": "Teams", "size": 181.0}, {"name": "Atheletes", "size": 4.0}, {"name": "Avg Squad", "size": 22.7}]}, {"name": "Division 2", "children": [{"name": "Teams", "size": 57.0}, {"name": "Atheletes", "size": 1.0}, {"name": "Avg Squad", "size": 19.5}]}, {"name": "Division 3", "children": [{"name": "Teams", "size": 139.0}, {"name": "Atheletes", "size": 2.0}, {"name": "Avg Squad", "size": 18.2}]}]}, {"name": "Tennis", "children": [{"name": "Division 1", "children": [{"name": "Teams", "size": 267.0}, {"name": "Atheletes", "size": 2.0}, {"name": "Avg Squad", "size": 10.8}]}, {"name": "Division 2", "children": [{"name": "Teams", "size": 172.0}, {"name": "Atheletes", "size": 1.0}, {"name": "Avg Squad", "size": 9.8}]}, {"name": "Division 3", "children": [{"name": "Teams", "size": 251.0}, {"name": "Atheletes", "size": 2.0}, {"name": "Avg Squad", "size": 11.0}]}]}, {"name": "Track,In", "children": [{"name": "Division 1", "children": [{"name": "Teams", "size": 209.0}, {"name": "Atheletes", "size": 7.0}, {"name": "Avg Squad", "size": 33.6}]}, {"name": "Division 2", "children": [{"name": "Teams", "size": 96.0}, {"name": "Atheletes", "size": 2.0}, {"name": "Avg Squad", "size": 27.8}]}, {"name": "Division 3", "children": [{"name": "Teams", "size": 117.0}, {"name": "Atheletes", "size": 3.0}, {"name": "Avg Squad", "size": 31.4}]}]}, {"name": "Track,Out", "children": [{"name": "Division 1", "children": [{"name": "Teams", "size": 230.0}, {"name": "Atheletes", "size": 8.0}, {"name": "Avg Squad", "size": 36.5}]}, {"name": "Division 2", "children": [{"name": "Teams", "size": 140.0}, {"name": "Atheletes", "size": 4.0}, {"name": "Avg Squad", "size": 28.6}]}, {"name": "Division 3", "children": [{"name": "Teams", "size": 207.0}, {"name": "Atheletes", "size": 6.0}, {"name": "Avg Squad", "size": 31.0}]}]}, {"name": "Volleyball", "children": [{"name": "Division 1", "children": [{"name": "Teams", "size": 33.0}, {"name": "Atheletes", "size": 455.0}, {"name": "Avg Squad", "size": 13.8}]}, {"name": "Division 2", "children": [{"name": "Teams", "size": 15.0}, {"name": "Atheletes", "size": 234.0}, {"name": "Avg Squad", "size": 15.6}]}, {"name": "Division 3", "children": [{"name": "Teams", "size": 15.0}, {"name": "Atheletes", "size": 189.0}, {"name": "Avg Squad", "size": 12.6}]}]}, {"name": "Waterpolo", "children": [{"name": "Division 1", "children": [{"name": "Teams", "size": 28.0}, {"name": "Atheletes", "size": 637.0}, {"name": "Avg Squad", "size": 22.8}]}, {"name": "Division 2", "children": [{"name": "Teams", "size": 8.0}, {"name": "Atheletes", "size": 150.0}, {"name": "Avg Squad", "size": 18.8}]}, {"name": "Division 3", "children": [{"name": "Teams", "size": 13.0}, {"name": "Atheletes", "size": 215.0}, {"name": "Avg Squad", "size": 16.5}]}]}, {"name": "Wrestling", "children": [{"name": "Division 1", "children": [{"name": "Teams", "size": 146.0}, {"name": "Atheletes", "size": 3.0}, {"name": "Avg Squad", "size": 25.1}]}, {"name": "Division 2", "children": [{"name": "Teams", "size": 68.0}, {"name": "Atheletes", "size": 1.0}, {"name": "Avg Squad", "size": 22.7}]}, {"name": "Division 3", "children": [{"name": "Teams", "size": 149.0}, {"name": "Atheletes", "size": 2.0}, {"name": "Avg Squad", "size": 18.2}]}]}]
+  },
+             {
+ "name": "1982 Mens",
+ "children": []
+             },
+             {
+ "name": "1983 Mens",
+ "children": []
+             },
+
+             {
+ "name": "1984 Mens",
+ "children": []
+             },
+             {
+ "name": "1985 Mens",
+ "children": []
+             },
+                          {
+ "name": "1986 Mens",
+ "children": []
+             },
+                          {
+ "name": "1987 Mens",
+ "children": []
+             },
+             {
+ "name": "1988 Mens",
+ "children": []
+             },
+                          {
+ "name": "1989 Mens",
+ "children": []
+             },
+                          {
+ "name": "1990 Mens",
+ "children": []
+             },
+                          {
+ "name": "1991 Mens",
+ "children": []
+             },
+                          {
+ "name": "1992 Mens",
+ "children": []
+             },
+             {
+ "name": "1993 Mens",
+ "children": []
+             },
+
+             {
+ "name": "1994 Mens",
+ "children": []
+             },
+             {
+ "name": "1995 Mens",
+ "children": []
+             },
+                          {
+ "name": "1996 Mens",
+ "children": []
+             },
+                          {
+ "name": "1997 Mens",
+ "children": []
+             },
+             {
+ "name": "1998 Mens",
+ "children": []
+             },
+                          {
+ "name": "1999 Mens",
+ "children": []
+             },
+                          {
+ "name": "2000 Mens",
+ "children": []
+             },
+                          {
+ "name": "2001 Mens",
+ "children": []
+             },
+                          {
+ "name": "2002 Mens",
+ "children": []
+             },
+                          {
+ "name": "2003 Mens",
+ "children": []
+             },
+
+             {
+ "name": "2004 Mens",
+ "children": []
+             },
+             {
+ "name": "2005 Mens",
+ "children": []
+             },
+                          {
+ "name": "2006 Mens",
+ "children": []
+             },
+                          {
+ "name": "2007 Mens",
+ "children": []
+             },
+             {
+ "name": "2008 Mens",
+ "children": []
+             },
+                          {
+ "name": "2009 Mens",
+ "children": []
+             },
+                          {
+ "name": "2010 Mens",
+ "children": []
+             },
+                          {
+ "name": "2011 Mens",
+ "children": []
+             },
+                          {
+ "name": "2012 Mens",
+ "children": []
+             },
+                          {
+ "name": "2013 Mens",
+ "children": []
+             },
+
+             {
+ "name": "2014 Mens",
+ "children": []
+             },
+             {
+ "name": "2015 Mens",
+ "children": []
+             },
+                          {
+ "name": "2016 Mens",
+ "children": []
+             },
+                          {
+ "name": "2017 Mens",
+ "children": []
+             },
+             {
+ "name": "2018 Mens",
+ "children": []
+             }
+            ]}
+  
