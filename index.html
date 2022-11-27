@@ -12,11 +12,19 @@
             font-size: 11px;
             background-color: lightblue;
             margin:auto;
+           
         
         }
         .infobox{
             margin:auto;
             margin-left:30%;
+        }
+        .datachoices{
+            margin-left: 7%;
+         
+            margin-top:-5%;
+            margin-right:70%;
+            
         }
         .slidertext{
             margin-left:30%;
@@ -95,9 +103,24 @@
     <div class="rangeslider">
   <input type="range" min="1981" max="2018" value="1981"
                   class="myslider" id="sliderRange">
-  <p>Year: <span id="demo"></span></p>
+  <h2><p>Year: <span id="demo"></span></p></h2>
 </div>
 </div>
+
+<div class = "datachoices">
+    <h1>Filter by: </h1>
+    <h1>
+    <input type="checkbox" id="vehicle1" name="vehicle1" >
+    <label for="vehicle1"> Divisions</label><br>
+    <input type="checkbox" id="vehicle2" name="vehicle2" >
+    <label for="vehicle2"> Micro Information</label><br>
+    <input type="checkbox" id="vehicle3" name="vehicle3" >
+    <label for="vehicle3"> Male</label><br>
+    <input type="checkbox" id="vehicle4" name="vehicle4" >
+    <label for="vehicle4"> Female</label><br>
+</h1>
+</div>
+
 
     
     <!---<h1>Sources:</h1>
@@ -109,6 +132,8 @@
 -->
     <script>
 function update(cool){
+
+    
                 function focusOn(d = { x0: 0, x1: 1, y0: 0, y1: 1 }) {
             // Reset to top-level if no data point specified
 
@@ -156,7 +181,11 @@ function update(cool){
         const y = d3.scaleSqrt()
             .range([maxRadius*0.1, maxRadius]);
 
-        const color = d3.scaleOrdinal([`grey`,`green`]);
+    
+       // const color = d3.scaleOrdinal([`grey`,`green`]);
+       // var colors = d3.scale.ordinal()
+   // .range(["#62ADDB", "#7568BA", "#FF8F2B", "#6BC96D","red","green","purple","blue","yellow","teal","brown","orange","red","red","red","red","red","red","red"]); 
+
 
         const partition = d3.partition();
 
@@ -193,6 +222,7 @@ function update(cool){
         const svg = d3.select('body').append('svg')
             .style('width', '100vw')
             .style('height', '100vh')
+        
             .attr('viewBox', `${-width / 2} ${-height / 2} ${width} ${height}`)
             .on('click', () => focusOn()); // Reset zoom on canvas click
 
@@ -207,10 +237,11 @@ function update(cool){
             root = d3.hierarchy(root);
             console.log(root);
             root.sum(d => d.size);
-
+            const color = d3.scaleOrdinal().range(d3.quantize(d3.interpolateRainbow, root.children.length + 1));
+     
             const slice = svg.selectAll('g.slice')
                 .data(partition(root).descendants());
-
+      
             slice.exit().remove();
 
             const newSlice = slice.enter()
@@ -226,7 +257,12 @@ function update(cool){
             newSlice.append('path')
                 .attr('class', 'main-arc')
         
-                .style('fill', d => color((d.children ? d : d.parent).data.name))
+                //.style('fill', d => color((d.children ? d : d.parent).data.name))
+                .attr("fill", d => {
+        while (d.depth > 1)
+          d = d.parent;
+        return color(d.data.name);
+      })
                 .attr('d', arc);
 
             newSlice.append('path')
@@ -271,8 +307,7 @@ rangeslider.oninput = function() {
 
         
     </script>
-  
-  <!--
+    <!--
     <h1>Created by:</h1>
     <h1>
         <ul>
@@ -283,7 +318,7 @@ rangeslider.oninput = function() {
         </ul>
         in collaboration with Suresh K Lodha and Jacob 
         <br>
-        <a>Github Link</a>
+        <a href="https://yashvb.github.io/cse163finalproject/">Github Link</a>
         <br>
         Designed for CSE: Data Programming for Visualization, Fall 2022
     </h1>
@@ -293,6 +328,6 @@ rangeslider.oninput = function() {
         <div class="Column"><h1>Code Sources</h1></div>
         <div class="Column"><h1>Data Sources</h1></div>
     </div>
+    
 -->
-
 </body>
