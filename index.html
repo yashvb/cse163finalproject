@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, shrink-to-fit=no"
+/>
+<head>
+    <style>
+
+        body {
+            font-family: Sans-serif;
+            font-size: 11px;
+            background-color: lightblue;
+            margin: auto;
+           
+        
+        }
+        .infobox{
+            margin:auto;
+            margin-left:30%;
+            margin-top: 3%;
+        }
+        .datachoices{
+            margin-left: 10%;
+         
+            margin-top:-5.5%;
+            margin-right:70%;
+            
+        }
+        .slidertext{
+            margin-left:30%;
+            width: 200%;
+            margin-top:3%;
+        }
+        .slice {
+            cursor: pointer;
+        }
+
+        .slice .main-arc {
+            stroke: #fff;
+            stroke-width: 1px;
+        }
+
+        .slice .hidden-arc {
+            fill: none;
+        }
+
+        .slice text {
+            pointer-events: none;
+            dominant-baseline: middle;
+            text-anchor: middle;
+        }
+            .ticks {
+      font-size: 10px;
+    }
+        
+        .rangeslider{
+    width: 50%;
+}
+.Row {
+    display: table;
+    width: 100%; /*Optional*/
+    table-layout: fixed; /*Optional*/
+    border-spacing: 10px; /*Optional*/
+}
+.Column {
+    display: table-cell;
+   
+}
+  
+.myslider {
+    -webkit-appearance: none;
+    background: #FCF3CF  ;
+    width: 50%;
+    height: 20px;
+    opacity: 2;
+   }
+  
+  
+.myslider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    cursor: pointer;
+    background: #34495E  ;
+    width: 5%;
+    height: 20px;
+}
+  
+  
+.myslider:hover {
+    opacity: 1;
+}
+#tooltip {
+    position: absolute;
+    width: 150px;
+    height: auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 5px;
+    border: solid;
+    border-color: black;
+    pointer-events: none;
+}
+
+#tooltip.hidden {
+    display: none;
+}
+
+#tooltip p {
+    margin: 0;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 15px;
+}
+
+.title {
+    text-align:center;
+}
+#sunburst {
+    margin-left: 7%;
+    
+}
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 2px;
+}
+#chartthing {
+ 
+    margin-left: 15%;
+    opacity: 100%;
+
+}
+#shortinsight{
+    margin-left:1%;
+}
+#titleofsvg{
+    margin-left: 36%;
+}
+    </style>
+
+    <script src='https://d3js.org/d3.v4.min.js'></script>
+
+  
+</head>
+<body>
+    <div id="tooltip" class="hidden">
+        <b><p class="title"></p></b>
+            <p># of Atheletes:  <span id="totalvalue" style="margin-top: 30%"></span></p>
+    </div>
+
+
+    
+    <div class="infobox">
+    <h1>The Participation Rates of Collegiate Atheletes from the Years 1981 to 2018</h1>
+</div>
+
+<div></div>
+<h2 id="shortinsight">As of recent sport popularity has become a multi billion dollar industry with millions of participants every year on every level from high school to pro leagues. With this our visualization aims to look at the the participation levels 
+    of collegiate atheletes from the year 1981 to 2018. With this data visualization we gain insight into how major economic and political events had an impact on collegiate sport participation. An example of this being with the the early 1980s recession and its adverse effect on the number of collegiate atheletes or the boom 
+    in participation experienced by all sports as a result of the end of the Cold War in the mid 1990s.
+</h2>
+
+<div id="thevisualizations">
+
+    <div id="sunburst"></div>
+
+    <div id="chartthing"></div>
+
+</div>
+
+<div id = "titleofsvg">
+
+    <h1 id = "actualtitleofsvg"> Sunburst Diagram of Number of Atheletes by Sport by Year</h1>
+</div>
+<div class="slidertext">
+  
+    <div class="rangeslider">
+  <input type="range" min="1981" max="2018" value="1981"
+                  class="myslider" id="sliderRange">
+  <h2 style="margin-left:20%;margin-top:1%"><p>Current Year: <span id="demo"></span></p></h2>
+</div>
+</div>
+
+
+<div class = "datachoices">
+    <h1>Filter by: </h1>
+    <h1>
+  
+    <input type="checkbox" id="v1" name="vehicle1" class ="divisioncheck" value = "0">
+    <label for="v1"> Division</label><br>
+    <input type="checkbox" id="v2" name="vehicle2" class = "gendercheck" value = "0">
+    <label for="v2"> Gender</label><br>
+    <input type="checkbox" id="v3" name="vehicle1" class ="vischange" value = "0">
+    <label for="v3"> Visualization</label><br>
+  
+</h1>
+</div>
+
+    <script>
+
+
+function update(cool,inputname){
+
+    
+                function focusOn(d = { x0: 0, x1: 1, y0: 0, y1: 1 }) {
+            // Reset to top-level if no data point specified
+
+            const transition = svg.transition()
+                .duration(750)
+                .tween('scale', () => {
+                    const xd = d3.interpolate(x.domain(), [d.x0, d.x1]),
+                        yd = d3.interpolate(y.domain(), [d.y0, 1]);
+                    return t => { x.domain(xd(t)); y.domain(yd(t)); };
+                });
+
+            transition.selectAll('path.main-arc')
+                .attrTween('d', d => () => arc(d));
+
+            transition.selectAll('path.hidden-arc')
+                .attrTween('d', d => () => middleArcLine(d));
+
+            transition.selectAll('text')
+                .attrTween('display', d => () => textFits(d) ? null : 'none');
+
+            moveStackToFront(d);
+
+            //
+
+            function moveStackToFront(elD) {
+                svg.selectAll('.slice').filter(d => d === elD)
+                    .each(function(d) {
+                        this.parentNode.appendChild(this);
+                        if (d.parent) { moveStackToFront(d.parent); }
+                    })
+            }
+        }
+        console.log(window.innerWidth);
+        console.log(window.innerHeight);
+        const width = window.innerWidth,
+            height = window.innerHeight-50,
+            // change size of sunburst by changing middle arc space
+            maxRadius = (Math.min(width, height) / 2) ;
+
+        const formatNumber = d3.format(',d');
+
+        const x = d3.scaleLinear()
+            .range([0, 2 * Math.PI])
+            .clamp(true);
+
+        // for the middle circle for zoomability
+        const y = d3.scaleSqrt()
+            .range([maxRadius*0.2, maxRadius]);
+
+    
+       // const color = d3.scaleOrdinal([`grey`,`green`]);
+       // var colors = d3.scale.ordinal()
+   // .range(["#62ADDB", "#7568BA", "#FF8F2B", "#6BC96D","red","green","purple","blue","yellow","teal","brown","orange","red","red","red","red","red","red","red"]); 
+
+
+        const partition = d3.partition();
+
+        const arc = d3.arc()
+            .startAngle(d => x(d.x0))
+            .endAngle(d => x(d.x1))
+            .innerRadius(d => Math.max(0, y(d.y0)))
+            //.innerRadius(d => d.y0 * 400) 
+            .outerRadius(d => Math.max(0, y(d.y1)));
+
+        const middleArcLine = d => {
+            const halfPi = Math.PI/2;
+            const angles = [x(d.x0) - halfPi, x(d.x1) - halfPi];
+            const r = Math.max(0, (y(d.y0) + y(d.y1)) / 2);
+
+            const middleAngle = (angles[1] + angles[0]) / 2;
+            const invertDirection = middleAngle > 0 && middleAngle < Math.PI; 
+            if (invertDirection) { angles.reverse(); }
+
+            const path = d3.path();
+            path.arc(0, 0, r, angles[0], angles[1], invertDirection);
+            return path.toString();
+        };
+
+        const textFits = d => {
+            const CHAR_SPACE = 6;
+
+            const deltaAngle = x(d.x1) - x(d.x0);
+            const r = Math.max(0, (y(d.y0) + y(d.y1)) / 2);
+            const perimeter = r * deltaAngle;
+
+            return d.data.name.length * CHAR_SPACE < perimeter;
+        };
+
+        const svg = d3.select('#sunburst').append('svg')
+            .style('width', '80vw')
+            .style('height', '80vh')
+        
+            .attr('viewBox', `${-width / 2} ${-height / 2} ${width} ${height}`)
+            .on('click', () => focusOn()); // Reset zoom on canvas click
+        
+        if(inputname == 0){
+            nametouse = "justsports.json"
+        }
+        
+        if(inputname == 1){
+            nametouse = "bothgenderanddivision.json"
+        }
+        if(inputname == 2){
+            nametouse = "justgender.json"
+        }
+        if(inputname == 3){
+            nametouse = "justdivision.json"
+        }
+        if(inputname == 4){
+            nametouse = "basecase.json"
+        }
+        
+        d3.json(nametouse, (error, root) => {
+            if (error) throw error;
+            var y = 0;
+            console.log(cool);
+            console.log(root.children[cool]);
+            root = root.children[cool];
+            console.log(root.children[cool]);
+            root = d3.hierarchy(root);
+            console.log(root);
+            root.sum(d => d.size);
+            const color = d3.scaleOrdinal().range(d3.quantize(d3.interpolateRainbow, root.children.length + 1));
+     
+            const slice = svg.selectAll('g.slice')
+                .data(partition(root).descendants());
+      
+            slice.exit().remove();
+
+            const newSlice = slice.enter()
+                .append('g').attr('class', 'slice')
+                .on('click', d => {
+                    d3.event.stopPropagation();
+                    focusOn(d);
+                })
+                .on("mouseover", function(d) {
+                // the location of the tooltip relative to mousehover
+                d3.select("#tooltip")
+                    .style("left", (d3.event.clientX +20) + "px")
+                    .style("top", (d3.event.clientY - 20) + "px");
+          
+                console.log(d.data.name);
+                d3.select(".title")
+                .text(d.data.name + '\n');
+             
+                d3.select("#totalvalue")
+                    .text(formatNumber(d.value));
+                // makes the tooltip visible 
+                d3.select("#tooltip").classed("hidden", false);
+            })
+           
+            .on("mouseout", function() {
+                d3.select("#tooltip").classed("hidden", true);
+            });
+                
+
+    
+               
+
+            newSlice.append('path')
+                .attr('class', 'main-arc')
+        
+                //.style('fill', d => color((d.children ? d : d.parent).data.name))
+                .attr("fill", d => {
+        while (d.depth > 1)
+          d = d.parent;
+        return color(d.data.name);
+      })
+                .attr('d', arc);
+
+            newSlice.append('path')
+                .attr('class', 'hidden-arc')
+                .attr('id', (_, i) => `hiddenArc${i}`)
+                .attr('d', middleArcLine);
+
+            const text = newSlice.append('text')
+                .attr('display', d => textFits(d) ? null : 'none');
+
+            // Add white contour
+            text.append('textPath')
+                .attr('startOffset','50%')
+                .attr('xlink:href', (_, i) => `#hiddenArc${i}` )
+                .text(d => d.data.name)
+                .style('fill', 'none')
+                .style('stroke', '#fff')
+                .style('stroke-width', 5)
+                .style('stroke-linejoin', 'round');
+
+            text.append('textPath')
+                .attr('startOffset','50%')
+                .attr('xlink:href', (_, i) => `#hiddenArc${i}` )
+                .text(d => d.data.name);
+        });
+}
+
+function linechart(){
+    var	margin = {top: 30, right: 40, bottom: 30, left: 60},
+	width = 900 - margin.left - margin.right,
+	height = 500 - margin.top - margin.bottom;
+
+// parse the date / time
+var parseTime = d3.timeParse("%Y");
+
+// set the ranges
+var x = d3.scaleTime().range([0, width]);
+var y = d3.scaleLinear().range([height, 0]);
+
+// define the 1st line
+var valueline = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.Basketball); });
+
+// define the 2nd line
+var valueline2 = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.Baseball); });
+
+    var valueline3 = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d['Cross C']); });
+
+    var valueline4 = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d['Fencing']); });
+    var valueline5 = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d['Football']); });
+    var valueline6 = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d['Golf']); });
+    var valueline7 = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d['Gymnastics']); });
+    var valueline8 = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d['Ice Hockey']); });
+    var valueline9 = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d['Lacrosse']); });
+    var valueline10 = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d['Rifle']); });
+    var valueline11 = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d['Skiiing']); });
+    var valueline12 = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d['Soccer']); });
+    var valueline13 = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d['Swimming']); });
+    var valueline14 = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d['Tennis']); });
+    var valueline15 = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d['Track, In']); });
+    var valueline16 = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d['Track, Out']); });
+    var valueline17 = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d['Volleyball']); });
+    var valueline18 = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d['Waterpolo']); });
+    var valueline19 = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d['Wrestling']); });
+// append the svg obgect to the body of the page
+// appends a 'group' element to 'svg'
+// moves the 'group' element to the top left margin
+var svg = d3.select("#chartthing").append("svg")
+    .attr("width", width + margin.left + margin.right+100)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+// Get the data
+d3.csv("linechartbase.csv", function(error, data) {
+  if (error) throw error;
+
+  // format the data
+  data.forEach(function(d) {
+      d.date = +parseTime(d.date);
+      d.Baseball = +d.Baseball;
+      d.Basketball = +d.Basketball;
+      d['Fencing'] = +d['Fencing'];
+      d['Football'] = +d['Football'];
+      d['Golf']= +d['Golf'];
+      d['Gymnastics'] = +d['Gymnastics'];
+      d['Ice Hockey'] = +d['Ice Hockey'];
+      d['Lacrosse'] = +d['Lacrosse'];
+      d['Rifle'] = +d['Rifle'];
+      d['Skiiing'] = +d['Skiiing'];
+      d['Soccer'] = +d['Soccer'];
+      d['Swimming'] = +d['Swimming'];
+      d['Tennis'] = +d['Tennis'];
+      d['Track, In'] = +d['Track, In'];
+      d['Track, Out'] = +d['Track, Out'];
+      d['Volleyball'] = +d['Volleyball'];
+      d['Waterpolo'] = +d['Waterpolo'];
+      d['Wrestling'] = +d['Wrestling'];
+  });
+
+  // Scale the range of the data
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+  y.domain([0, d3.max(data, function(d) {
+	  return Math.max(80000,d.Basketball, d.Baseball,d['Cross C']); })]);
+
+  // Add the valueline path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke","#ff3333")
+      .attr("d", valueline);
+
+      var colors= ['aqua', '#84311F', 'blue', 'fuchsia', 'gray', 'green', 
+'lime', 'maroon', 'navy', 'olive', 'orange', 'purple', 'red', 
+'silver', 'teal', 'white', 'yellow'];
+  // Add the valueline2 path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colors[0])
+      .attr("d", valueline2);
+
+      svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colors[1])
+      .attr("d", valueline3);
+      svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colors[2])
+      .attr("d", valueline4)
+      .text("hisd");
+      svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colors[3])
+      .attr("d", valueline5);
+      svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colors[4])
+      .attr("d", valueline6);
+      svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colors[5])
+      .attr("d", valueline7);
+      svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colors[6])
+      .attr("d", valueline8);
+      svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colors[7])
+      .attr("d", valueline9);
+      svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colors[8])
+      .attr("d", valueline10);
+      svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colors[9])
+      .attr("d", valueline11);
+      svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colors[10])
+      .attr("d", valueline12);
+      svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colors[11])
+      .attr("d", valueline13);
+      svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colors[12])
+      .attr("d", valueline14);
+      svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colors[13])
+      .attr("d", valueline15);
+      svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colors[14])
+      .attr("d", valueline16);
+      svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colors[15])
+      .attr("d", valueline17);
+      svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colors[16])
+      .attr("d", valueline18);
+      svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", "black")
+      .attr("d", valueline19);
+
+
+
+  // Add the X Axis
+  svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+  // Add the Y Axis
+  svg.append("g")
+      .call(d3.axisLeft(y));
+
+
+      svg.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+    .attr("x", 430)
+    .attr("y", height +30)
+    .style("font-size","15px")
+    .text("Years");
+
+    svg.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("y", -60)
+    .attr("x",-90)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .style("font-size","15px")
+    .text("Number of Atheletes that Participated");
+
+
+
+svg.append("circle").attr("cx",850).attr("cy",70).attr("r", 6).style("background-color", "#ff3333")
+svg.append("circle").attr("cx",850).attr("cy",90).attr("r", 6).style("fill",  colors[0])
+svg.append("circle").attr("cx",850).attr("cy",110).attr("r", 6).style("fill",  colors[1])
+svg.append("circle").attr("cx",850).attr("cy",130).attr("r", 6).style("fill",  colors[2])
+svg.append("circle").attr("cx",850).attr("cy",150).attr("r", 6).style("fill",  colors[3])
+svg.append("circle").attr("cx",850).attr("cy",170).attr("r", 6).style("fill",  colors[4])
+svg.append("circle").attr("cx",850).attr("cy",190).attr("r", 6).style("fill",  colors[5])
+svg.append("circle").attr("cx",850).attr("cy",210).attr("r", 6).style("fill",  colors[6])
+svg.append("circle").attr("cx",850).attr("cy",230).attr("r", 6).style("fill",  colors[7])
+svg.append("circle").attr("cx",850).attr("cy",250).attr("r", 6).style("fill",  colors[8])
+svg.append("circle").attr("cx",850).attr("cy",270).attr("r", 6).style("fill",  colors[9])
+svg.append("circle").attr("cx",850).attr("cy",290).attr("r", 6).style("fill",  colors[10])
+svg.append("circle").attr("cx",850).attr("cy",310).attr("r", 6).style("fill",  colors[11])
+svg.append("circle").attr("cx",850).attr("cy",330).attr("r", 6).style("fill",  colors[12])
+svg.append("circle").attr("cx",850).attr("cy",350).attr("r", 6).style("fill",  colors[13])
+svg.append("circle").attr("cx",850).attr("cy",370).attr("r", 6).style("fill",  colors[14])
+svg.append("circle").attr("cx",850).attr("cy",390).attr("r", 6).style("fill",  colors[15])
+svg.append("circle").attr("cx",850).attr("cy",410).attr("r", 6).style("fill",  colors[16])
+svg.append("circle").attr("cx",850).attr("cy",430).attr("r", 6).style("fill", "light-purple")
+
+svg.append("text").attr("x", 840).attr("y", 30).text("Legend").style("font-size", "30px").attr("alignment-baseline","middle").attr("text-decoration","underline")
+svg.append("text").attr("x", 865).attr("y", 70).text("Basketball").style("font-size", "15px").attr("alignment-baseline","middle")
+svg.append("text").attr("x", 865).attr("y", 90).text("Baseball").style("font-size", "15px").attr("alignment-baseline","middle")
+svg.append("text").attr("x", 865).attr("y", 110).text("Cross C").style("font-size", "15px").attr("alignment-baseline","middle")
+svg.append("text").attr("x", 865).attr("y", 130).text("Fencing").style("font-size", "15px").attr("alignment-baseline","middle")
+svg.append("text").attr("x", 865).attr("y", 150).text("Football").style("font-size", "15px").attr("alignment-baseline","middle")
+svg.append("text").attr("x",865).attr("y", 170).text("Golf").style("font-size", "15px").attr("alignment-baseline","middle")
+svg.append("text").attr("x", 865).attr("y", 190).text("Gymnastics").style("font-size", "15px").attr("alignment-baseline","middle")
+svg.append("text").attr("x", 865).attr("y", 210).text("Ice Hockey").style("font-size", "15px").attr("alignment-baseline","middle")
+svg.append("text").attr("x", 865).attr("y", 230).text("Lacrosse").style("font-size", "15px").attr("alignment-baseline","middle")
+svg.append("text").attr("x", 865).attr("y", 250).text("Rifle").style("font-size", "15px").attr("alignment-baseline","middle")
+svg.append("text").attr("x", 865).attr("y", 270).text("Skiing").style("font-size", "15px").attr("alignment-baseline","middle")
+svg.append("text").attr("x", 865).attr("y", 290).text("Soccer").style("font-size", "15px").attr("alignment-baseline","middle")
+svg.append("text").attr("x", 865).attr("y", 310).text("Swimming").style("font-size", "15px").attr("alignment-baseline","middle")
+svg.append("text").attr("x", 865).attr("y", 330).text("Tennis").style("font-size", "15px").attr("alignment-baseline","middle")
+svg.append("text").attr("x", 865).attr("y", 350).text("Track, In").style("font-size", "15px").attr("alignment-baseline","middle")
+svg.append("text").attr("x", 865).attr("y", 370).text("Track, Out").style("font-size", "15px").attr("alignment-baseline","middle")
+svg.append("text").attr("x", 865).attr("y", 390).text("Volleyball").style("font-size", "15px").attr("alignment-baseline","middle")
+svg.append("text").attr("x", 865).attr("y", 410).text("Waterpolo").style("font-size", "15px").attr("alignment-baseline","middle")
+svg.append("text").attr("x", 865).attr("y", 430).text("Wrestling").style("font-size", "15px").attr("alignment-baseline","middle")
+
+
+});
+}
+
+function linechartgender(){
+    var	margin = {top: 30, right: 40, bottom: 30, left: 60},
+	width = 900 - margin.left - margin.right,
+	height = 500 - margin.top - margin.bottom;
+
+// parse the date / time
+var parseTime = d3.timeParse("%Y");
+
+// set the ranges
+var x = d3.scaleTime().range([0, width]);
+var y = d3.scaleLinear().range([height, 0]);
+
+// define the 1st line
+var valueline = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.male); });
+
+// define the 2nd line
+var valueline2 = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.female); });
+
+  
+// append the svg obgect to the body of the page
+// appends a 'group' element to 'svg'
+// moves the 'group' element to the top left margin
+var svg = d3.select("#chartthing").append("svg")
+    .attr("width", width + margin.left + margin.right+100)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+// Get the data
+d3.csv("justgenderlinechart.csv", function(error, data) {
+  if (error) throw error;
+
+  // format the data
+  data.forEach(function(d) {
+      d.date = +parseTime(d.date);
+      d.male = +d.male;
+      d.female = +d.female;
+ 
+  });
+
+  // Scale the range of the data
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+  y.domain([0, d3.max(data, function(d) {
+	  return Math.max(80000,d.male, d.female); })]);
+
+  // Add the valueline path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke","black")
+      .attr("d", valueline);
+
+      var colors= ['aqua', '#84311F', 'blue', 'fuchsia', 'gray', 'green', 
+'lime', 'maroon', 'navy', 'olive', 'orange', 'purple', 'red', 
+'silver', 'teal', 'white', 'yellow'];
+  // Add the valueline2 path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colors[1])
+      .attr("d", valueline2);
+
+   
+
+
+
+  // Add the X Axis
+  svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+  // Add the Y Axis
+  svg.append("g")
+      .call(d3.axisLeft(y));
+
+
+      svg.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+    .attr("x", 400)
+    .attr("y", height +30)
+    .text("Years");
+
+    svg.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("y", -55)
+    .attr("x",-90)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("Number of Atheletes that Participated");
+
+
+
+svg.append("circle").attr("cx",850).attr("cy",70).attr("r", 6).style("background-color", "#ff3333")
+svg.append("circle").attr("cx",850).attr("cy",110).attr("r", 6).style("fill",  colors[1])
+
+
+svg.append("text").attr("x", 840).attr("y", 30).text("Legend").style("font-size", "30px").attr("alignment-baseline","middle").attr("text-decoration","underline")
+svg.append("text").attr("x", 865).attr("y", 70).text("Male").style("font-size", "15px").attr("alignment-baseline","middle")
+svg.append("text").attr("x", 865).attr("y", 110).text("Female").style("font-size", "15px").attr("alignment-baseline","middle")
+
+
+});
+}
+
+function linechartdivision(){
+    var	margin = {top: 30, right: 40, bottom: 30, left: 60},
+	width = 900 - margin.left - margin.right,
+	height = 500 - margin.top - margin.bottom;
+
+// parse the date / time
+var parseTime = d3.timeParse("%Y");
+
+// set the ranges
+var x = d3.scaleTime().range([0, width]);
+var y = d3.scaleLinear().range([height, 0]);
+
+// define the 1st line
+var valueline = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.divisionone); });
+
+// define the 2nd line
+var valueline2 = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.divisiontwo); });
+    var valueline3 = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.divisionthree); });
+
+  
+// append the svg obgect to the body of the page
+// appends a 'group' element to 'svg'
+// moves the 'group' element to the top left margin
+var svg = d3.select("#chartthing").append("svg")
+    .attr("width", width + margin.left + margin.right+100)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+// Get the data
+d3.csv("linechartdivision.csv", function(error, data) {
+  if (error) throw error;
+
+  // format the data
+  data.forEach(function(d) {
+      d.date = +parseTime(d.date);
+      d.divisionone = +d.divisionone;
+      d.divisiontwo = +d.divisiontwo;
+      d.divisionthree = +d.divisionthree;
+ 
+  });
+
+  // Scale the range of the data
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+  y.domain([0, d3.max(data, function(d) {
+	  return Math.max(80000,d.divisionone, d.divisiontwo,d.divisionthree); })]);
+
+  // Add the valueline path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke","black")
+      .attr("d", valueline);
+
+      var colors= ['aqua', '#84311F', 'blue', 'fuchsia', 'gray', 'green', 
+'lime', 'maroon', 'navy', 'olive', 'orange', 'purple', 'red', 
+'silver', 'teal', 'white', 'yellow'];
+  // Add the valueline2 path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colors[1])
+      .attr("d", valueline2);
+      svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colors[2])
+      .attr("d", valueline3);
+   
+
+
+
+  // Add the X Axis
+  svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+  // Add the Y Axis
+  svg.append("g")
+      .call(d3.axisLeft(y));
+
+
+      svg.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+    .attr("x", 400)
+    .attr("y", height +30)
+    .text("Years");
+
+    svg.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("y", -55)
+    .attr("x",-90)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("Number of Atheletes that Participated");
+
+
+
+    svg.append("circle").attr("cx",850).attr("cy",70).attr("r", 6).style("fill",  "black")
+svg.append("circle").attr("cx",850).attr("cy",100).attr("r", 6).style("fill",  colors[1])
+svg.append("circle").attr("cx",850).attr("cy",130).attr("r", 6).style("fill",  colors[2])
+
+
+svg.append("text").attr("x", 840).attr("y", 30).text("Legend").style("font-size", "30px").attr("alignment-baseline","middle").attr("text-decoration","underline")
+svg.append("text").attr("x", 865).attr("y", 70).text("Division 1").style("font-size", "15px").attr("alignment-baseline","middle")
+svg.append("text").attr("x", 865).attr("y", 100).text("Division 2").style("font-size", "15px").attr("alignment-baseline","middle")
+svg.append("text").attr("x", 865).attr("y", 130).text("Division 3").style("font-size", "15px").attr("alignment-baseline","middle")
+
+
+});
+}
+function linechartdivisionandgender(){
+    var	margin = {top: 30, right: 40, bottom: 30, left: 60},
+	width = 900 - margin.left - margin.right,
+	height = 500 - margin.top - margin.bottom;
+
+// parse the date / time
+var parseTime = d3.timeParse("%Y");
+
+// set the ranges
+var x = d3.scaleTime().range([0, width]);
+var y = d3.scaleLinear().range([height, 0]);
+
+// define the 1st line
+var valueline = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.divisiononem); });
+
+// define the 2nd line
+var valueline2 = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.divisiononef); });
+
+
+
+
+    var valueline3 = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.divisiontwom); });
+
+    var valueline4 = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.divisiontwof); });
+    var valueline5 = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.divisionthreem); });
+    var valueline6 = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.divisionthreef); });
+
+  
+// append the svg obgect to the body of the page
+// appends a 'group' element to 'svg'
+// moves the 'group' element to the top left margin
+var svg = d3.select("#chartthing").append("svg")
+    .attr("width", width + margin.left + margin.right+100)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+// Get the data
+d3.csv("bothgenderanddivisionthingylc.csv", function(error, data) {
+  if (error) throw error;
+
+  // format the data
+  data.forEach(function(d) {
+      d.date = +parseTime(d.date);
+      d.divisiononem = +d.divisiononem;
+      d.divisiononef = +d.divisiononef;
+      d.divisiontwom = +d.divisiontwom;
+      d.divisiontwof = +d.divisiontwof;
+      d.divisionthreem = +d.divisionthreem;
+      d.divisionthreef = +d.divisionthreef;
+ 
+  });
+
+  // Scale the range of the data
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+  y.domain([0, d3.max(data, function(d) {
+	  return Math.max(150000,d.divisiononem, d.divisiontwom,d.divisionthreem); })]);
+
+  // Add the valueline path.
+
+
+      var colors= ['green',"#AAFF00","blue","cyan","black","white"];
+
+svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke",colors[0])
+      .attr("d", valueline);
+  // Add the valueline2 path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colors[1])
+      .attr("d", valueline2);
+      svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colors[2])
+      .attr("d", valueline3);
+
+      svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colors[3])
+      .attr("d", valueline4);
+   
+      svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colors[4])
+      .attr("d", valueline5);
+   
+      svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colors[5])
+      .attr("d", valueline6);
+   
+   
+
+
+
+  // Add the X Axis
+  svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+  // Add the Y Axis
+  svg.append("g")
+      .call(d3.axisLeft(y));
+
+
+      svg.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+    .attr("x", 400)
+    .attr("y", height +30)
+    .text("Years");
+
+    svg.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("y", -55)
+    .attr("x",-90)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("Number of Atheletes that Participated");
+
+
+
+    svg.append("circle").attr("cx",850).attr("cy",70).attr("r", 6).style("fill",  "black")
+svg.append("circle").attr("cx",850).attr("cy",100).attr("r", 6).style("fill",  colors[1])
+svg.append("circle").attr("cx",850).attr("cy",130).attr("r", 6).style("fill",  colors[2])
+svg.append("circle").attr("cx",850).attr("cy",160).attr("r", 6).style("fill",  colors[3])
+svg.append("circle").attr("cx",850).attr("cy",190).attr("r", 6).style("fill",  colors[4])
+svg.append("circle").attr("cx",850).attr("cy",220).attr("r", 6).style("fill",  colors[5])
+
+
+svg.append("text").attr("x", 840).attr("y", 30).text("Legend").style("font-size", "30px").attr("alignment-baseline","middle").attr("text-decoration","underline")
+svg.append("text").attr("x", 859).attr("y", 70).text("Division 1 M").style("font-size", "15px").attr("alignment-baseline","middle")
+svg.append("text").attr("x", 859).attr("y", 100).text("Division 1 F").style("font-size", "15px").attr("alignment-baseline","middle")
+svg.append("text").attr("x", 859).attr("y", 130).text("Division 2 M").style("font-size", "15px").attr("alignment-baseline","middle")
+svg.append("text").attr("x", 859).attr("y", 160).text("Division 2 F").style("font-size", "15px").attr("alignment-baseline","middle")
+svg.append("text").attr("x", 859).attr("y", 190).text("Division 3 M").style("font-size", "15px").attr("alignment-baseline","middle")
+svg.append("text").attr("x", 859).attr("y", 220).text("Division 3 F").style("font-size", "15px").attr("alignment-baseline","middle")
+
+
+});
+}
+
+
+update(0,0);
+var rangeslider = document.getElementById("sliderRange");
+var output = document.getElementById("demo");
+console.log(rangeslider.value);
+output.innerHTML = rangeslider.value;
+
+
+cb = document.getElementsByClassName('gendercheck')[0]
+var dopeboy = 0
+cb.addEventListener('change', function(){some_var = this.checked; console.log(some_var); if(dopeboy == 0){dopeboy = 1;}else{dopeboy=0;}var actual = rangeslider.value-1981;
+  d3.select("svg").remove();
+
+  if(lchecker==0){
+    if(dopeboy == 0){
+    if(dchecker == 0){
+        document.getElementById("actualtitleofsvg").innerHTML = "Sunburst Diagram of Number of Atheletes by Sport by Year";
+      
+        update(actual,0);
+    }else{
+        document.getElementById("actualtitleofsvg").innerHTML = "Sunburst Diagram of Number of Atheletes by Division Sport by Year";
+        update(actual,3);
+    }
+  }else{
+    if(dchecker == 0){
+        document.getElementById("actualtitleofsvg").innerHTML = "Sunburst Diagram of Number of Atheletes by Gender by Sport by Year";
+        update(actual,2);
+    }else{
+        document.getElementById("actualtitleofsvg").innerHTML = "Sunburst Diagram of Number of Atheletes by Gender by Division by Sport by Year";
+        update(actual,1);
+    }
+  
+
+
+}
+
+  }else{
+    if(dopeboy == 0){
+    if(dchecker == 0){
+        document.getElementById("actualtitleofsvg").innerHTML = "Line Graph of Number of Atheletes by Sport by Year";
+        linechart();
+    }else{
+        document.getElementById("actualtitleofsvg").innerHTML = "Line Graph of Number of Atheletes by Division by Year";
+        linechartdivision();
+    }
+  }else{
+    if(dchecker == 0){
+        document.getElementById("actualtitleofsvg").innerHTML = "Line Graph of Number of Atheletes by Gender by Year";
+        linechartgender();
+    }else{
+        document.getElementById("actualtitleofsvg").innerHTML = "Line Graph of Number of Atheletes by Gender by Division by Year";
+        linechartdivisionandgender();
+    }
+        
+
+
+  }
+
+
+
+}})
+
+
+  
+
+dc = document.getElementsByClassName('divisioncheck')[0]
+var dchecker = 0
+dc.addEventListener('change', function(){some_var = this.checked; console.log(some_var); if(dchecker == 0){dchecker = 1;}else{dchecker=0;}var actual = rangeslider.value-1981;
+  d3.select("svg").remove();
+
+  if(lchecker==0){
+    //document.getElementById("slidertext").style.opacity = "100%";
+    if(dopeboy == 0){
+    if(dchecker == 0){
+        document.getElementById("actualtitleofsvg").innerHTML = "Sunburst Diagram of Number of Atheletes by Sport by Year";
+        update(actual,0);
+    }else{
+        document.getElementById("actualtitleofsvg").innerHTML = "Sunburst Diagram of Number of Atheletes by Division Sport by Year";
+        update(actual,3);
+    }
+  }else{
+    if(dchecker == 0){
+        document.getElementById("actualtitleofsvg").innerHTML = "Sunburst Diagram of Number of Atheletes by Gender by Sport by Year";
+        update(actual,2);
+    }else{
+        document.getElementById("actualtitleofsvg").innerHTML = "Sunburst Diagram of Number of Atheletes by Gender by Division by Sport by Year";
+        update(actual,1);
+    }
+  
+
+
+}
+
+  }else{
+    //document.getElementById("slidertext").style.opacity = "0%";
+    if(dopeboy == 0){
+    if(dchecker == 0){
+        document.getElementById("actualtitleofsvg").innerHTML = "Line Graph of Number of Atheletes by Sport by Year";
+        linechart();
+    }else{
+        document.getElementById("actualtitleofsvg").innerHTML = "Line Graph of Number of Atheletes by Division by Year";
+        linechartdivision();
+    }
+  }else{
+    if(dchecker == 0){
+        document.getElementById("actualtitleofsvg").innerHTML = "Line Graph of Number of Atheletes by Gender by Year";
+        linechartgender();
+    }else{
+        document.getElementById("actualtitleofsvg").innerHTML = "Line Graph of Number of Atheletes by Gender by Division by Year";
+        linechartdivisionandgender();
+    }
+        
+
+
+  }
+
+
+
+}})
+
+lc = document.getElementsByClassName('vischange')[0]
+var lchecker = 0
+lc.addEventListener('change', function(){some_var = this.checked; console.log(some_var); if(lchecker == 0){lchecker = 1;}else{lchecker=0;}var actual = rangeslider.value-1981;
+  d3.select("svg").remove();
+
+  if(lchecker == 0){
+    if(dopeboy == 0){
+    if(dchecker == 0){
+        document.getElementById("actualtitleofsvg").innerHTML = "Sunburst Diagram of Number of Atheletes by Sport by Year";
+        update(actual,0);
+    }else{
+        document.getElementById("actualtitleofsvg").innerHTML = "Sunburst Diagram of Number of Atheletes by Division Sport by Year";
+        update(actual,3);
+    }
+  }else{
+    if(dchecker == 0){
+        document.getElementById("actualtitleofsvg").innerHTML = "Sunburst Diagram of Number of Atheletes by Gender by Sport by Year";
+        update(actual,2);
+    }else{
+        document.getElementById("actualtitleofsvg").innerHTML = "Sunburst Diagram of Number of Atheletes by Gender by Division by Sport by Year";
+        update(actual,1);
+    }
+  
+
+
+}
+  }else{
+ 
+    if(dopeboy == 0){
+    if(dchecker == 0){
+        document.getElementById("actualtitleofsvg").innerHTML = "Line Graph of Number of Atheletes by Sport by Year";
+        linechart();
+    }else{
+        document.getElementById("actualtitleofsvg").innerHTML = "Line Graph of Number of Atheletes by Division by Year";
+        linechartdivision();
+    }
+  }else{
+    if(dchecker == 0){
+        document.getElementById("actualtitleofsvg").innerHTML = "Line Graph of Number of Atheletes by Gender by Year";
+        linechartgender();
+    }else{
+        document.getElementById("actualtitleofsvg").innerHTML = "Line Graph of Number of Atheletes by Gender by Division by Year";
+        linechartdivisionandgender();
+    }
+        
+
+
+  }
+
+
+  
+
+
+  }})
+
+  
+rangeslider.oninput = function() {
+  output.innerHTML = this.value;
+  var actual = this.value-1981;
+  d3.select("svg").remove();
+
+  if(dopeboy == 0){
+    if(dchecker == 0){
+        update(actual,0);
+    }else{
+        update(actual,3);
+    }
+  }else{
+    if(dchecker == 0){
+        update(actual,2);
+    }else{
+        update(actual,1);
+    }
+  }
+
+}
+
+    
+    
+    </script>
+
+</div>
+<p style="margin-left:40%;margin-top:5%">*Some data for female sports is missing such as is the case with Football and Baseball. Data sourced from NCAA®</p>
+<div class = "note" id ="note"  style="position:relative;right:0px; font-size:16px; text-align:center;" id="myParagraph">
+    <div class = 'author'>
+        <h4 style="font-weight: bold"><br/>Created by</h4>
+            <p style="position:relative;top:0px;right:0px; font-size:16px; text-align:center;" id="myParagraph">
+                Yash Bhedaru (ybhedaru@ucsc.edu)<br> 
+                Dheeraj Talluri(dtalluri@ucsc.edu)<br>
+                Vignesh Chandrakesaran(vichandr@ucsc.edu)<br>
+                Michael Weinburg (mfweinbe@ucsc.edu) in collaboration with Suresh K Lodha and Jacob</p>
+            <p>Github Link: <a href="https://yashvb.github.io/cse163finalproject/">https://yashvb.github.io/cse163finalproject/</a></p>
+        <h4 style="font-weight: bold"><br/>Designed for</h4>
+            <p id="myParagraph">CSE: Data Programming for Visualization, Fall 2022</p>
+    </div>
+</div>
+    <div class="Row">
+        <div class="Column"><h1>Files</h1>
+        <ul>
+            <li>index.html</li>
+            <li>basecase.json</li>
+            <li>bothgenderanddivision.json</li>
+            <li>bothgenderanddivisionthingylc.csv</li>
+            <li>convertdatathingyash.py</li>
+            <li>femalenowthingyash.py</li>
+            <li>justdivision.json</li>
+            <li>justgender.json</li>
+            <li>justgenderlinechart.csv</li>
+            <li>justsports.json</li>
+            <li>linechartbase.csv</li>
+            <li>linechartdivision.csv</li>
+            <li>mendata.json</li>
+            <li>womendata.json</li>
+            <li>yashconvertmaledata.py</li>
+        
+        </ul></div>
+        <div class="Column"><h1>Visual Sources</h1>   <ul>
+            <li><a href="https://sureshlodha.github.io/CMPS263_Winter2018/CMPS263FinalProjects/ChineseHistory/index.html">The Rise and Fall of Chinese History: 221 BC to 2018 AC</a></li>
+        
+        </ul></div>
+
+        <div class="Column"><h1>Code Sources</h1>   <ul>
+            <li><a href="https://bl.ocks.org/mbostock/4063423">Source 1</a></li>
+            <li><a href="https://bl.ocks.org/mbostock/4348373">Source 2</a></li>
+            <li><a href="https://bl.ocks.org/vasturiano/12da9071095fbd4df434e60d52d2d58d">Source 3</a></li>
+            <li><a href="https://stackoverflow.com/questions/58083093/how-to-reduce-size-of-sunburst-inner-circle-in-d3">Source 4</a></li>
+            <li><a href="https://www.convertcsv.com/csv-to-json.htm">Source 5</a></li>
+            <li><a href="https://observablehq.com/@margretwg/d3-zoomable-sunburst">Source 6</a></li>
+            <li><a href="https://bl.ocks.org/mbostock/4063423">Source 7</a></li>
+            <li><a href="https://bl.ocks.org/d3noob/8603837">Source 8</a></li>
+            <li><a href="https://d3-graph-gallery.com/graph/custom_legend.html">Source 9</a></li>
+        
+        </ul></div>
+        <div class="Column"><h1>Data Sources</h1>   <ul>
+            <li> <a href="https://ncaaorg.s3.amazonaws.com/research/sportpart/2018-19RES_SportsSponsorshipParticipationRatesReport.pdf">NCAA®
+                Sports Sponsorship and Participation Rates Report</a></li>
+                <li> <a href="https://www.ncaa.org/sports/2015/3/2/estimated-probability-of-competing-in-college-athletics.aspx">NCAA®
+                    Estimated probability of competing in college athletics</a></li>
+    
+        
+        </ul></div>
+    </div>
+
+
+
+</body>
